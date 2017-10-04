@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {View, Text, Button, StyleSheet, AsyncStorage} from 'react-native'
+import {View, Text, Button, StyleSheet, AsyncStorage, FlatList} from 'react-native'
+import Conversation from './Conversation'
 import axios from 'axios'
 
 class HomeScreen extends Component {
@@ -10,6 +11,8 @@ class HomeScreen extends Component {
       loggedIn: false,
       conversations: []
     }
+
+    this.handleChooseConversation = this.handleChooseConversation.bind(this)
   }
 
   componentDidMount () {
@@ -22,8 +25,9 @@ class HomeScreen extends Component {
         headers: {
           Authorization: `Bearer ${token}`
         }
-      }).then(response =>{
-        if (response.staus !== 401) {
+      }).then(response => {
+        console.log(response)
+        if (response.status !== 401) {
           this.setState({
             loggedIn: true,
             conversations: response.data
@@ -33,24 +37,37 @@ class HomeScreen extends Component {
     })
   }
 
+  handleChooseConversation (conversationId){
+    const {navigate} = this.props.navigation
+    navigate('Conversation', {conversationId})
+  }
+
   render () {
     const {navigate} = this.props.navigation
 
     if (this.state.loggedIn) {
+      console.log(this.state)
       return (
         <View style={styles.container}>
           <Text>Conversations will go here</Text>
-          <Button title="New Conversation" onPress={() => navigate('NewConversation')} />
+          <Button title='New Conversation' onPress={() => navigate('NewConversation')} />
+          <FlatList
+            data={this.state.conversations}
+            renderItem={({item}) => <Conversation onChooseConversation={this.handleChooseConversation} {...item}/>}
+            keyExtractor={(item) =>{
+              console.log(item)
+              return item._id }}
+          />
         </View>
       )
     }
     return (
       <View style={styles.container}>
         <Text style={styles.heroText}>
-                    Welcome to Messenger
+            Welcome to Messenger
         </Text>
-        <Button title='Login' onPress={() => navigate('Login')} />
-        <Button title='Register' onPress={() => navigate('Register')} />
+        <Button title="Login" onPress={() => navigate('Login')}/>
+        <Button title="Register" onPress={() => navigate('Register')}/>
       </View>
     )
   }
@@ -75,3 +92,4 @@ HomeScreen.navigationOptions = {
 }
 
 export default HomeScreen
+
