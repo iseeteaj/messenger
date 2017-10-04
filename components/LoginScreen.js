@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Text, TextInput, Button, StyleSheet, ActivityIndicator, AsyncStorage} from 'react-native'
+import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, AsyncStorage } from 'react-native'
 import axios from 'axios'
 class LoginScreen extends Component {
   constructor () {
@@ -15,7 +15,7 @@ class LoginScreen extends Component {
   }
 
   handleLogin () {
-    this.setState({loading:true})
+    this.setState({loading: true})
 
     const { navigate } = this.props.navigation
     const { mobileNumber, password} = this.state
@@ -36,7 +36,7 @@ class LoginScreen extends Component {
   }
 
   render () {
-    if (this.state.loading) {
+    if (this.state.loading){
       return (
         <View style={styles.container}>
           <ActivityIndicator />
@@ -60,7 +60,7 @@ class LoginScreen extends Component {
           autoCapitalize='none'
           secureTextEntry={true}
           onChangeText={(text) => this.setState({password: text})}
-          />
+        />
 
         <Button title='Log in'onPress={this.handleLogin}/>
       </View>
@@ -84,11 +84,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
-  Input: {
+  Input:{
     backgroundColor: 'white',
     padding: 10,
     marginBottom: 20
-    }
+  }
 })
 
 export default LoginScreen
